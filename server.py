@@ -2,6 +2,7 @@
 from fastmcp import FastMCP
 import random
 import logging
+import open_weather_api_helper as weather_helper
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,16 +23,8 @@ def get_weather(city: str) -> dict:
         Dictionary with weather information
     """
     logger.info(f"Getting weather for city: {city}")
-    # Simulate weather data (in production, call a real weather API)
-    conditions = ["Sunny", "Cloudy", "Rainy", "Partly Cloudy", "Stormy"]
-    
-    weather_data = {
-        "city": city,
-        "temperature": random.randint(10, 35),
-        "condition": random.choice(conditions),
-        "humidity": random.randint(30, 90),
-        "wind_speed": random.randint(5, 25)
-    }
+
+    weather_data = weather_helper.get_weather(city)
     
     logger.info(f"Weather data for {city}: {weather_data['condition']}, {weather_data['temperature']}°C")
     return weather_data
@@ -50,18 +43,7 @@ def get_forecast(city: str, days: int = 3) -> list:
         List of daily forecasts
     """
     logger.info(f"Getting {days}-day forecast for city: {city}")
-    conditions = ["Sunny", "Cloudy", "Rainy", "Partly Cloudy"]
-    forecast = []
-    
-    for day in range(1, days + 1):
-        forecast.append({
-            "day": day,
-            "city": city,
-            "temperature": random.randint(10, 35),
-            "condition": random.choice(conditions)
-        })
-    
-    logger.info(f"Generated {len(forecast)} forecast entries for {city}")
+    forecast = weather_helper.get_forecast(city, days)
     return forecast
 
 # Resource: City weather data
@@ -100,5 +82,5 @@ def analyze_weather(city: str) -> str:
 
 # CRITICAL: Run the server
 if __name__ == "__main__":
-    logger.info("Starting Weather MCP Server...")
+    logger.info("Starting Weather MCP Server with OpenWeatherAPI...")
     mcp.run()
