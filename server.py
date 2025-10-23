@@ -1,6 +1,10 @@
 # server.py - Simple Weather MCP Server
 from fastmcp import FastMCP
 import random
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize MCP server with a descriptive name
 mcp = FastMCP("Weather Service")
@@ -17,16 +21,20 @@ def get_weather(city: str) -> dict:
     Returns:
         Dictionary with weather information
     """
+    logger.info(f"Getting weather for city: {city}")
     # Simulate weather data (in production, call a real weather API)
     conditions = ["Sunny", "Cloudy", "Rainy", "Partly Cloudy", "Stormy"]
     
-    return {
+    weather_data = {
         "city": city,
         "temperature": random.randint(10, 35),
         "condition": random.choice(conditions),
         "humidity": random.randint(30, 90),
         "wind_speed": random.randint(5, 25)
     }
+    
+    logger.info(f"Weather data for {city}: {weather_data['condition']}, {weather_data['temperature']}°C")
+    return weather_data
 
 # Tool 2: Get weather forecast
 @mcp.tool()
@@ -41,6 +49,7 @@ def get_forecast(city: str, days: int = 3) -> list:
     Returns:
         List of daily forecasts
     """
+    logger.info(f"Getting {days}-day forecast for city: {city}")
     conditions = ["Sunny", "Cloudy", "Rainy", "Partly Cloudy"]
     forecast = []
     
@@ -52,6 +61,7 @@ def get_forecast(city: str, days: int = 3) -> list:
             "condition": random.choice(conditions)
         })
     
+    logger.info(f"Generated {len(forecast)} forecast entries for {city}")
     return forecast
 
 # Resource: City weather data
@@ -66,6 +76,7 @@ def get_city_weather_resource(city: str) -> str:
     Returns:
         Formatted weather information
     """
+    logger.info(f"Accessing weather resource for city: {city}")
     weather = get_weather(city)
     return f"Current weather in {weather['city']}: {weather['condition']}, " \
            f"{weather['temperature']}°C, Humidity: {weather['humidity']}%, " \
@@ -83,9 +94,11 @@ def analyze_weather(city: str) -> str:
     Returns:
         Prompt for LLM to analyze weather
     """
+    logger.info(f"Generating weather analysis prompt for city: {city}")
     return f"Analyze the current weather conditions in {city} and provide " \
            f"recommendations for outdoor activities."
 
 # CRITICAL: Run the server
 if __name__ == "__main__":
+    logger.info("Starting Weather MCP Server...")
     mcp.run()
