@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "weather-service": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "weather-mcp-server:latest"
+      ]
+    }
+  }
+}
