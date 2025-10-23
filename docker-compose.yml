@@ -4,6 +4,7 @@ services:
   weather-mcp:
     build: .
     container_name: weather-mcp-server
-    stdin_open: true
-    tty: true
+    restart: unless-stopped
+    environment:
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
     command: python server.py
