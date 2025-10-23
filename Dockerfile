@@ -4,7 +4,6 @@ FROM python:3.11-slim
 # Set environment variables for non-interactive mode
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV OPENWEATHER_API_KEY=
 
 # Set working directory
 WORKDIR /app

@@ -1,6 +1,10 @@
 # Dockerfile for Weather MCP Server
 FROM python:3.11-slim
 
+# Set environment variables for non-interactive mode
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
 # Set working directory
 WORKDIR /app
 
@@ -19,4 +23,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY *.py .
 
 # Set the entrypoint to run the server
-ENTRYPOINT ["python", "server.py"]
+ENTRYPOINT ["python", "-u", "server.py"]
